@@ -1,0 +1,507 @@
+'use client'
+
+import { useState, useEffect, useCallback } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import {
+  Armchair,
+  Bed,
+  ChefHat,
+  Sparkles,
+  Car,
+  VolumeX,
+  Smartphone,
+  Phone,
+  MapPin,
+  Home,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  Sun,
+  Moon,
+  Globe,
+  Play
+} from 'lucide-react'
+import { useLanguage } from '@/context/LanguageContext'
+import { useTheme } from '@/context/ThemeContext'
+
+const WHATSAPP_NUMBER = '966504211545'
+
+const sliderImages = [
+  '/images/slide-1.jpg',
+  '/images/slide-2.jpg',
+  '/images/slide-3.jpg',
+  '/images/slide-4.jpg',
+]
+
+const placeholderImages = [
+  'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2075&q=80',
+  'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2075&q=80',
+  'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2075&q=80',
+  'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2075&q=80',
+]
+
+const WhatsAppIcon = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+)
+
+export default function LandingPage() {
+  const { language, setLanguage, t } = useLanguage()
+  const { theme, toggleTheme } = useTheme()
+  const [currentSlide, setCurrentSlide] = useState(0)
+  const [imagesLoaded, setImagesLoaded] = useState<boolean[]>([false, false, false, false])
+
+  const nextSlide = useCallback(() => {
+    setCurrentSlide((prev) => (prev + 1) % 4)
+  }, [])
+
+  const prevSlide = useCallback(() => {
+    setCurrentSlide((prev) => (prev - 1 + 4) % 4)
+  }, [])
+
+  useEffect(() => {
+    const timer = setInterval(nextSlide, 5000)
+    return () => clearInterval(timer)
+  }, [nextSlide])
+
+  useEffect(() => {
+    sliderImages.forEach((src, index) => {
+      const img = new Image()
+      img.onload = () => {
+        setImagesLoaded(prev => {
+          const newState = [...prev]
+          newState[index] = true
+          return newState
+        })
+      }
+      img.onerror = () => {
+        setImagesLoaded(prev => {
+          const newState = [...prev]
+          newState[index] = false
+          return newState
+        })
+      }
+      img.src = src
+    })
+  }, [])
+
+  const getImageSrc = (index: number) => {
+    return imagesLoaded[index] ? sliderImages[index] : placeholderImages[index]
+  }
+
+  const scrollToContact = () => {
+    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  const features = [
+    {
+      icon: Armchair,
+      titleKey: 'features.space.title',
+      descKey: 'features.space.desc'
+    },
+    {
+      icon: Bed,
+      titleKey: 'features.rooms.title',
+      descKey: 'features.rooms.desc'
+    },
+    {
+      icon: ChefHat,
+      titleKey: 'features.kitchen.title',
+      descKey: 'features.kitchen.desc'
+    },
+    {
+      icon: Sparkles,
+      titleKey: 'features.services.title',
+      descKey: 'features.services.desc'
+    },
+    {
+      icon: Car,
+      titleKey: 'features.parking.title',
+      descKey: 'features.parking.desc'
+    }
+  ]
+
+  const premiumFeatures = [
+    {
+      icon: VolumeX,
+      titleKey: 'premium.sound.title',
+      descKey: 'premium.sound.desc'
+    },
+    {
+      icon: Smartphone,
+      titleKey: 'premium.smart.title',
+      descKey: 'premium.smart.desc'
+    }
+  ]
+
+  const isDark = theme === 'dark'
+
+  return (
+    <main className={`min-h-screen transition-colors duration-300 ${isDark ? 'bg-slate-900' : 'bg-stone-50'}`}>
+      {/* Header with Language & Theme Toggle */}
+      <header className="fixed top-0 left-0 right-0 z-50 p-4">
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
+          <motion.div 
+            className="flex gap-2"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            {/* Language Toggle */}
+            <button
+              onClick={() => setLanguage(language === 'ar' ? 'en' : 'ar')}
+              className={`flex items-center gap-2 px-4 py-2 backdrop-blur-sm rounded-full shadow-lg hover:shadow-xl transition-all ${isDark ? 'bg-slate-800/90 text-stone-200' : 'bg-white/90 text-slate-700'}`}
+            >
+              <Globe className="w-4 h-4" />
+              <span className="text-sm font-medium">{language === 'ar' ? 'EN' : 'عربي'}</span>
+            </button>
+
+            {/* Theme Toggle */}
+            <button
+              onClick={toggleTheme}
+              className={`flex items-center gap-2 px-4 py-2 backdrop-blur-sm rounded-full shadow-lg hover:shadow-xl transition-all ${isDark ? 'bg-slate-800/90 text-stone-200' : 'bg-white/90 text-slate-700'}`}
+            >
+              {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            </button>
+          </motion.div>
+        </div>
+      </header>
+
+      {/* Hero Section with Slider */}
+      <section className="relative h-screen flex items-center justify-center overflow-hidden">
+        {/* Image Slider */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentSlide}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.7 }}
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            style={{ backgroundImage: `url('${getImageSrc(currentSlide)}')` }}
+          >
+            <div className="absolute inset-0 bg-black/50"></div>
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Slider Controls */}
+        <button
+          onClick={prevSlide}
+          className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-3 bg-white/20 hover:bg-white/40 backdrop-blur-sm rounded-full transition-all"
+        >
+          <ChevronLeft className="w-6 h-6 text-white" />
+        </button>
+        <button
+          onClick={nextSlide}
+          className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-3 bg-white/20 hover:bg-white/40 backdrop-blur-sm rounded-full transition-all"
+        >
+          <ChevronRight className="w-6 h-6 text-white" />
+        </button>
+
+        {/* Slider Dots */}
+        <div className="absolute bottom-24 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+          {[0, 1, 2, 3].map((index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentSlide(index)}
+              className={`w-3 h-3 rounded-full transition-all ${
+                currentSlide === index ? 'bg-amber-500 w-8' : 'bg-white/50 hover:bg-white/80'
+              }`}
+            />
+          ))}
+        </div>
+
+        {/* Hero Content */}
+        <motion.div 
+          className="relative z-10 text-center px-4 max-w-4xl mx-auto"
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6 }}
+            className="mb-6"
+          >
+            <span className="inline-block px-4 py-2 bg-amber-600/20 border border-amber-500/30 rounded-full text-amber-300 text-sm font-medium mb-4">
+              <Home className="inline-block w-4 h-4 me-2" />
+              {t('hero.badge')}
+            </span>
+          </motion.div>
+          
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-4 leading-tight">
+            {t('hero.title')} <span className="text-amber-400">{t('hero.titleHighlight')}</span>
+          </h1>
+          
+          <div className="flex items-center justify-center gap-2 text-amber-300 mb-6">
+            <MapPin className="w-5 h-5" />
+            <span className="text-lg md:text-xl">{t('hero.location')}</span>
+          </div>
+          
+          <p className="text-xl md:text-2xl text-stone-200 mb-10 font-light">
+            {t('hero.subtitle')}
+          </p>
+          
+          <motion.button
+            onClick={scrollToContact}
+            className="group bg-amber-600 hover:bg-amber-700 text-white px-10 py-4 rounded-lg text-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-amber-600/25 hover:shadow-2xl"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            {t('hero.cta')}
+            <ChevronDown className="inline-block w-5 h-5 ms-2 group-hover:translate-y-1 transition-transform" />
+          </motion.button>
+        </motion.div>
+
+        {/* Scroll Indicator */}
+        <motion.div 
+          className="absolute bottom-8 left-1/2 -translate-x-1/2"
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        >
+          <ChevronDown className="w-8 h-8 text-white/60" />
+        </motion.div>
+      </section>
+
+      {/* Video Section */}
+      <section className={`py-20 md:py-28 transition-colors ${isDark ? 'bg-slate-800' : 'bg-white'}`}>
+        <div className="max-w-5xl mx-auto px-6">
+          <motion.div 
+            className="text-center mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+              {t('video.title')}
+            </h2>
+            <p className={`text-lg ${isDark ? 'text-stone-400' : 'text-slate-600'}`}>{t('video.subtitle')}</p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className={`relative aspect-video rounded-2xl overflow-hidden shadow-2xl ${isDark ? 'bg-slate-700' : 'bg-slate-200'}`}
+          >
+            {/* Video Placeholder - Replace with actual video */}
+            <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-slate-800 to-slate-900">
+              <div className="text-center">
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="w-20 h-20 bg-amber-600 hover:bg-amber-700 rounded-full flex items-center justify-center shadow-lg mb-4 mx-auto"
+                >
+                  <Play className="w-8 h-8 text-white ms-1" />
+                </motion.button>
+                <p className="text-stone-400 text-sm">
+                  {language === 'ar' ? 'ضع الفيديو هنا: /images/apartment-video.mp4' : 'Place video here: /images/apartment-video.mp4'}
+                </p>
+              </div>
+            </div>
+            {/* Uncomment below when you have the video */}
+            {/* <video 
+              className="w-full h-full object-cover"
+              controls
+              poster="/images/video-poster.jpg"
+            >
+              <source src="/images/apartment-video.mp4" type="video/mp4" />
+            </video> */}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Introduction Section */}
+      <section className={`py-20 md:py-28 transition-colors ${isDark ? 'bg-slate-900' : 'bg-stone-50'}`}>
+        <motion.div 
+          className="max-w-4xl mx-auto px-6 text-center"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+        >
+          <div className="w-20 h-1 bg-amber-600 mx-auto mb-8"></div>
+          <p className={`text-xl md:text-2xl leading-relaxed font-light ${isDark ? 'text-stone-300' : 'text-slate-700'}`}>
+            {t('intro.text')}
+          </p>
+          <div className="w-20 h-1 bg-amber-600 mx-auto mt-8"></div>
+        </motion.div>
+      </section>
+
+      {/* Features Section - Vertical with Scroll Animation */}
+      <section className={`py-20 md:py-28 transition-colors ${isDark ? 'bg-slate-800' : 'bg-white'}`}>
+        <div className="max-w-4xl mx-auto px-6">
+          <motion.div 
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+              {t('features.title')}
+            </h2>
+            <p className={`text-lg ${isDark ? 'text-stone-400' : 'text-slate-600'}`}>{t('features.subtitle')}</p>
+          </motion.div>
+
+          <div className="space-y-6">
+            {features.map((feature, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, x: language === 'ar' ? 50 : -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className={`flex items-start gap-6 p-6 md:p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border group ${isDark ? 'bg-slate-700/50 border-slate-600' : 'bg-stone-50 border-stone-100'}`}
+              >
+                <div className={`w-16 h-16 rounded-xl flex items-center justify-center shrink-0 group-hover:bg-amber-600 transition-colors duration-300 ${isDark ? 'bg-amber-600/20' : 'bg-amber-100'}`}>
+                  <feature.icon className={`w-8 h-8 group-hover:text-white transition-colors duration-300 ${isDark ? 'text-amber-500' : 'text-amber-600'}`} />
+                </div>
+                <div>
+                  <h3 className={`text-xl font-bold mb-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>{t(feature.titleKey)}</h3>
+                  <p className={`leading-relaxed ${isDark ? 'text-stone-400' : 'text-slate-600'}`}>{t(feature.descKey)}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Premium Highlights Section */}
+      <section className="py-20 md:py-28 bg-slate-900">
+        <div className="max-w-6xl mx-auto px-6">
+          <motion.div 
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              {t('premium.title')}
+            </h2>
+            <p className="text-stone-400 text-lg">{t('premium.subtitle')}</p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+            {premiumFeatures.map((feature, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.2 }}
+                className="bg-slate-800/50 p-8 md:p-10 rounded-2xl border-2 border-amber-600/30 hover:border-amber-500 transition-all duration-300"
+              >
+                <div className="w-16 h-16 bg-amber-600/20 rounded-2xl flex items-center justify-center mb-6">
+                  <feature.icon className="w-8 h-8 text-amber-500" />
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-4">{t(feature.titleKey)}</h3>
+                <p className="text-stone-300 text-lg leading-relaxed">{t(feature.descKey)}</p>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Furnished Badge */}
+          <motion.div 
+            className="text-center"
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+          >
+            <div className="inline-block bg-gradient-to-l from-amber-600 to-amber-700 px-8 py-4 rounded-xl shadow-lg">
+              <p className="text-white text-xl font-bold">
+                {t('premium.furnished')}
+              </p>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section id="contact" className={`py-20 md:py-28 transition-colors ${isDark ? 'bg-slate-800' : 'bg-white'}`}>
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+              {t('contact.title')}
+            </h2>
+            <p className={`text-lg mb-10 ${isDark ? 'text-stone-400' : 'text-slate-600'}`}>
+              {t('contact.subtitle')}
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <motion.a
+                href="tel:0504211545"
+                className="inline-flex items-center justify-center gap-3 bg-amber-600 hover:bg-amber-700 text-white px-10 py-5 rounded-xl text-xl font-bold transition-all duration-300 shadow-lg hover:shadow-amber-600/25 hover:shadow-2xl"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Phone className="w-6 h-6" />
+                <span dir="ltr">0504211545</span>
+              </motion.a>
+
+              <motion.a
+                href={`https://wa.me/${WHATSAPP_NUMBER}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-3 bg-green-600 hover:bg-green-700 text-white px-10 py-5 rounded-xl text-xl font-bold transition-all duration-300 shadow-lg hover:shadow-green-600/25 hover:shadow-2xl"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <WhatsAppIcon className="w-6 h-6" />
+                <span>WhatsApp</span>
+              </motion.a>
+            </div>
+
+            <p className={`mt-6 ${isDark ? 'text-stone-500' : 'text-slate-500'}`}>
+              {t('contact.available')}
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-slate-900 py-8">
+        <div className="max-w-6xl mx-auto px-6 text-center">
+          <p className="text-stone-400">
+            {t('footer.rights')}
+          </p>
+        </div>
+      </footer>
+
+      {/* Floating WhatsApp Button */}
+      <motion.a
+        href={`https://wa.me/${WHATSAPP_NUMBER}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-24 md:bottom-8 start-4 z-50 w-14 h-14 bg-green-500 hover:bg-green-600 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all"
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        transition={{ delay: 1, type: 'spring' }}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+      >
+        <WhatsAppIcon className="w-7 h-7 text-white" />
+      </motion.a>
+
+      {/* Floating CTA - Mobile */}
+      <motion.div 
+        className={`fixed bottom-0 left-0 right-0 p-4 backdrop-blur-sm border-t md:hidden z-40 ${isDark ? 'bg-slate-800/95 border-slate-700' : 'bg-white/95 border-stone-200'}`}
+        initial={{ y: 100 }}
+        animate={{ y: 0 }}
+        transition={{ delay: 1 }}
+      >
+        <a
+          href="tel:0504211545"
+          className="flex items-center justify-center gap-3 bg-amber-600 hover:bg-amber-700 text-white w-full py-4 rounded-xl text-lg font-bold transition-colors shadow-lg"
+        >
+          <Phone className="w-5 h-5" />
+          {t('contact.callNow')} - 0504211545
+        </a>
+      </motion.div>
+    </main>
+  )
+}
