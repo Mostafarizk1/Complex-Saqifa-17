@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
 import {
   Armchair,
   Bed,
@@ -10,35 +10,26 @@ import {
   Car,
   VolumeX,
   Smartphone,
-  Phone,
   MapPin,
   Home,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
+  X,
   Sun,
   Moon,
-  Globe,
-  Play
+  Globe
 } from 'lucide-react'
 import { useLanguage } from '@/context/LanguageContext'
 import { useTheme } from '@/context/ThemeContext'
 
 const WHATSAPP_NUMBER = '966504211545'
 
-const sliderImages = [
-  '/images/slide-1.jpg',
-  '/images/slide-2.jpg',
-  '/images/slide-3.jpg',
-  '/images/slide-4.jpg',
-]
+// Generate gallery image paths (1-45)
+const galleryImages = Array.from({ length: 45 }, (_, i) => `/images/gallery/${i + 1}.jpg`)
 
-const placeholderImages = [
-  'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2075&q=80',
-  'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2075&q=80',
-  'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2075&q=80',
-  'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2075&q=80',
-]
+const heroImage = '/images/slide-1.jpg'
+const heroPlaceholder = 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2075&q=80'
 
 const WhatsAppIcon = ({ className }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="currentColor">
@@ -49,50 +40,24 @@ const WhatsAppIcon = ({ className }: { className?: string }) => (
 export default function LandingPage() {
   const { language, setLanguage, t } = useLanguage()
   const { theme, toggleTheme } = useTheme()
-  const [currentSlide, setCurrentSlide] = useState(0)
-  const [imagesLoaded, setImagesLoaded] = useState<boolean[]>([false, false, false, false])
-
-  const nextSlide = useCallback(() => {
-    setCurrentSlide((prev) => (prev + 1) % 4)
-  }, [])
-
-  const prevSlide = useCallback(() => {
-    setCurrentSlide((prev) => (prev - 1 + 4) % 4)
-  }, [])
+  const [heroLoaded, setHeroLoaded] = useState(false)
+  const [selectedImage, setSelectedImage] = useState<number | null>(null)
 
   useEffect(() => {
-    const timer = setInterval(nextSlide, 5000)
-    return () => clearInterval(timer)
-  }, [nextSlide])
-
-  useEffect(() => {
-    sliderImages.forEach((src, index) => {
-      const img = new Image()
-      img.onload = () => {
-        setImagesLoaded(prev => {
-          const newState = [...prev]
-          newState[index] = true
-          return newState
-        })
-      }
-      img.onerror = () => {
-        setImagesLoaded(prev => {
-          const newState = [...prev]
-          newState[index] = false
-          return newState
-        })
-      }
-      img.src = src
-    })
+    const img = new Image()
+    img.onload = () => setHeroLoaded(true)
+    img.src = heroImage
   }, [])
 
-  const getImageSrc = (index: number) => {
-    return imagesLoaded[index] ? sliderImages[index] : placeholderImages[index]
-  }
+  const openLightbox = (index: number) => setSelectedImage(index)
+  const closeLightbox = () => setSelectedImage(null)
+  const nextImage = () => setSelectedImage((prev) => prev !== null ? (prev + 1) % galleryImages.length : null)
+  const prevImage = () => setSelectedImage((prev) => prev !== null ? (prev - 1 + galleryImages.length) % galleryImages.length : null)
 
   const scrollToContact = () => {
     document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
   }
+
 
   const features = [
     {
@@ -167,48 +132,14 @@ export default function LandingPage() {
         </div>
       </header>
 
-      {/* Hero Section with Slider */}
+      {/* Hero Section - Single Image */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        {/* Image Slider */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentSlide}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.7 }}
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-            style={{ backgroundImage: `url('${getImageSrc(currentSlide)}')` }}
-          >
-            <div className="absolute inset-0 bg-black/50"></div>
-          </motion.div>
-        </AnimatePresence>
-
-        {/* Slider Controls */}
-        <button
-          onClick={prevSlide}
-          className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-3 bg-white/20 hover:bg-white/40 backdrop-blur-sm rounded-full transition-all"
+        {/* Hero Image */}
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url('${heroLoaded ? heroImage : heroPlaceholder}')` }}
         >
-          <ChevronLeft className="w-6 h-6 text-white" />
-        </button>
-        <button
-          onClick={nextSlide}
-          className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-3 bg-white/20 hover:bg-white/40 backdrop-blur-sm rounded-full transition-all"
-        >
-          <ChevronRight className="w-6 h-6 text-white" />
-        </button>
-
-        {/* Slider Dots */}
-        <div className="absolute bottom-24 left-1/2 -translate-x-1/2 z-20 flex gap-2">
-          {[0, 1, 2, 3].map((index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentSlide(index)}
-              className={`w-3 h-3 rounded-full transition-all ${
-                currentSlide === index ? 'bg-amber-500 w-8' : 'bg-white/50 hover:bg-white/80'
-              }`}
-            />
-          ))}
+          <div className="absolute inset-0 bg-black/50"></div>
         </div>
 
         {/* Hero Content */}
@@ -283,37 +214,109 @@ export default function LandingPage() {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className={`relative aspect-video rounded-2xl overflow-hidden shadow-2xl ${isDark ? 'bg-slate-700' : 'bg-slate-200'}`}
+            className="relative aspect-video rounded-2xl overflow-hidden shadow-2xl"
           >
-            {/* Video Placeholder - Replace with actual video */}
-            <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-slate-800 to-slate-900">
-              <div className="text-center">
-                <motion.button
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="w-20 h-20 bg-amber-600 hover:bg-amber-700 rounded-full flex items-center justify-center shadow-lg mb-4 mx-auto"
-                >
-                  <Play className="w-8 h-8 text-white ms-1" />
-                </motion.button>
-                <p className="text-stone-400 text-sm">
-                  {language === 'ar' ? 'ضع الفيديو هنا: /images/apartment-video.mp4' : 'Place video here: /images/apartment-video.mp4'}
-                </p>
-              </div>
-            </div>
-            {/* Uncomment below when you have the video */}
-            {/* <video 
-              className="w-full h-full object-cover"
-              controls
-              poster="/images/video-poster.jpg"
-            >
-              <source src="/images/apartment-video.mp4" type="video/mp4" />
-            </video> */}
+            <iframe 
+              width="100%" 
+              height="100%" 
+              src="https://www.youtube.com/embed/1M0XKJfeiAk?si=0bb9AKLq6x9tCWxs" 
+              title="YouTube video player" 
+              frameBorder="0" 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+              referrerPolicy="strict-origin-when-cross-origin" 
+              allowFullScreen
+              className="w-full h-full"
+            ></iframe>
           </motion.div>
         </div>
       </section>
 
-      {/* Introduction Section */}
+      {/* Gallery Section - Grid Layout */}
       <section className={`py-20 md:py-28 transition-colors ${isDark ? 'bg-slate-900' : 'bg-stone-50'}`}>
+        <div className="max-w-7xl mx-auto px-6">
+          <motion.div 
+            className="text-center mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+              {t('gallery.title')}
+            </h2>
+            <p className={`text-lg ${isDark ? 'text-stone-400' : 'text-slate-600'}`}>{t('gallery.subtitle')}</p>
+          </motion.div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+            {galleryImages.map((img, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.02 }}
+                onClick={() => openLightbox(index)}
+                className="aspect-square rounded-xl overflow-hidden shadow-lg cursor-pointer group"
+              >
+                <img
+                  src={img}
+                  alt={`Gallery ${index + 1}`}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+                  }}
+                />
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Lightbox Modal */}
+      {selectedImage !== null && (
+        <div 
+          className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center"
+          onClick={closeLightbox}
+        >
+          <button
+            onClick={closeLightbox}
+            className="absolute top-4 right-4 p-2 text-white hover:text-amber-500 transition-colors"
+          >
+            <X className="w-8 h-8" />
+          </button>
+          
+          <button
+            onClick={(e) => { e.stopPropagation(); prevImage(); }}
+            className="absolute left-4 p-3 bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors"
+          >
+            <ChevronLeft className="w-8 h-8" />
+          </button>
+          
+          <div className="max-w-5xl max-h-[85vh] px-16" onClick={(e) => e.stopPropagation()}>
+            <img
+              src={galleryImages[selectedImage]}
+              alt={`Gallery ${selectedImage + 1}`}
+              className="max-w-full max-h-[85vh] object-contain rounded-lg"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+              }}
+            />
+          </div>
+          
+          <button
+            onClick={(e) => { e.stopPropagation(); nextImage(); }}
+            className="absolute right-4 p-3 bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors"
+          >
+            <ChevronRight className="w-8 h-8" />
+          </button>
+          
+          <div className="absolute bottom-4 text-white text-lg">
+            {selectedImage + 1} / {galleryImages.length}
+          </div>
+        </div>
+      )}
+
+      {/* Introduction Section */}
+      <section className={`py-20 md:py-28 transition-colors ${isDark ? 'bg-slate-800' : 'bg-white'}`}>
         <motion.div 
           className="max-w-4xl mx-auto px-6 text-center"
           initial={{ opacity: 0, y: 30 }}
@@ -432,29 +435,17 @@ export default function LandingPage() {
               {t('contact.subtitle')}
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <motion.a
-                href="tel:0504211545"
-                className="inline-flex items-center justify-center gap-3 bg-amber-600 hover:bg-amber-700 text-white px-10 py-5 rounded-xl text-xl font-bold transition-all duration-300 shadow-lg hover:shadow-amber-600/25 hover:shadow-2xl"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <Phone className="w-6 h-6" />
-                <span dir="ltr">0504211545</span>
-              </motion.a>
-
-              <motion.a
-                href={`https://wa.me/${WHATSAPP_NUMBER}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-3 bg-green-600 hover:bg-green-700 text-white px-10 py-5 rounded-xl text-xl font-bold transition-all duration-300 shadow-lg hover:shadow-green-600/25 hover:shadow-2xl"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <WhatsAppIcon className="w-6 h-6" />
-                <span>WhatsApp</span>
-              </motion.a>
-            </div>
+            <motion.a
+              href={`https://wa.me/${WHATSAPP_NUMBER}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-3 bg-green-600 hover:bg-green-700 text-white px-10 py-5 rounded-xl text-xl font-bold transition-all duration-300 shadow-lg hover:shadow-green-600/25 hover:shadow-2xl"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <WhatsAppIcon className="w-6 h-6" />
+              <span>{t('contact.whatsapp')}</span>
+            </motion.a>
 
             <p className={`mt-6 ${isDark ? 'text-stone-500' : 'text-slate-500'}`}>
               {t('contact.available')}
@@ -495,11 +486,13 @@ export default function LandingPage() {
         transition={{ delay: 1 }}
       >
         <a
-          href="tel:0504211545"
-          className="flex items-center justify-center gap-3 bg-amber-600 hover:bg-amber-700 text-white w-full py-4 rounded-xl text-lg font-bold transition-colors shadow-lg"
+          href={`https://wa.me/${WHATSAPP_NUMBER}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-center gap-3 bg-green-600 hover:bg-green-700 text-white w-full py-4 rounded-xl text-lg font-bold transition-colors shadow-lg"
         >
-          <Phone className="w-5 h-5" />
-          {t('contact.callNow')} - 0504211545
+          <WhatsAppIcon className="w-5 h-5" />
+          {t('contact.whatsapp')}
         </a>
       </motion.div>
     </main>

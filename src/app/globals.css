@@ -44,3 +44,22 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #b45309;
 }
+
+/* Gallery infinite scroll animation */
+@keyframes scrollGallery {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.gallery-track {
+  animation: scrollGallery 60s linear infinite;
+  width: max-content;
+}
+
+.gallery-track:hover {
+  animation-play-state: paused;
+}

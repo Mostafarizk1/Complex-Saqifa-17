@@ -52,11 +52,23 @@ const translations: Record<Language, Record<string, string>> = {
     'video.title': 'فيديو للشقة',
     'video.subtitle': 'شاهد جولة افتراضية داخل الشقة',
     
+    // Gallery
+    'gallery.title': 'معرض الصور',
+    'gallery.subtitle': 'استكشف تفاصيل الشقة من خلال الصور',
+    
+    // Viewing
+    'viewing.title': 'شوف بيتك الجديد على الواقع!',
+    'viewing.subtitle': 'نفتح أبوابنا لمعاينة الوحدة يومي الجمعة والسبت. سجل بياناتك الآن وسيتواصل معك فريقنا لتحديد الساعة المناسبة لك.',
+    'viewing.name': 'الاسم',
+    'viewing.phone': 'رقم الجوال',
+    'viewing.submit': 'سجل الآن',
+    'viewing.success': 'تم التسجيل بنجاح! سنتواصل معك قريباً',
+    
     // Contact
     'contact.title': 'لا تفوت الفرصة',
     'contact.subtitle': 'تواصل معنا اليوم لحجز معاينة واكتشف بنفسك روعة المكان',
     'contact.available': 'متاحون للرد على استفساراتكم على مدار الساعة',
-    'contact.callNow': 'اتصل الآن',
+    'contact.whatsapp': 'تواصل عبر واتساب',
     
     // Footer
     'footer.rights': '© 2024 مجمع سقيفة 17 - جميع الحقوق محفوظة',
@@ -106,11 +118,23 @@ const translations: Record<Language, Record<string, string>> = {
     'video.title': 'Apartment Video',
     'video.subtitle': 'Watch a virtual tour inside the apartment',
     
+    // Gallery
+    'gallery.title': 'Photo Gallery',
+    'gallery.subtitle': 'Explore apartment details through photos',
+    
+    // Viewing
+    'viewing.title': 'See Your New Home in Reality!',
+    'viewing.subtitle': 'We open our doors for unit viewing on Fridays and Saturdays. Register your details now and our team will contact you to set the right time for you.',
+    'viewing.name': 'Name',
+    'viewing.phone': 'Phone Number',
+    'viewing.submit': 'Register Now',
+    'viewing.success': 'Registration successful! We will contact you soon',
+    
     // Contact
     'contact.title': "Don't Miss Out",
     'contact.subtitle': 'Contact us today to book a tour and discover the beauty of the place',
     'contact.available': 'Available to answer your inquiries around the clock',
-    'contact.callNow': 'Call Now',
+    'contact.whatsapp': 'Contact via WhatsApp',
     
     // Footer
     'footer.rights': '© 2024 Saqifa 17 Complex - All Rights Reserved',
