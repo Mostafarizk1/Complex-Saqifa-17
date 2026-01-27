@@ -30,6 +30,7 @@ const WHATSAPP_NUMBER = '966504211545'
 const galleryImages = Array.from({ length: 45 }, (_, i) => `/images/gallery/${i + 1}.jpg`)
 
 const heroImage = '/images/slide-1.jpg'
+const heroImageMobile = '/images/slide-1-mobile.jpg'
 
 const WhatsAppIcon = ({ className }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="currentColor">
@@ -143,8 +144,23 @@ export default function LandingPage() {
 
       {/* Hero Section - Single Image */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        {/* Hero Image */}
-        <div className="absolute inset-0">
+        {/* Hero Image - Mobile */}
+        <div className="absolute inset-0 md:hidden">
+          <Image
+            src={heroImageMobile}
+            alt="مجمع سقيفة 17"
+            fill
+            priority
+            quality={75}
+            className="object-cover"
+            sizes="100vw"
+            loading="eager"
+            fetchPriority="high"
+          />
+          <div className="absolute inset-0 bg-black/50"></div>
+        </div>
+        {/* Hero Image - Desktop */}
+        <div className="absolute inset-0 hidden md:block">
           <Image
             src={heroImage}
             alt="مجمع سقيفة 17"
@@ -153,6 +169,8 @@ export default function LandingPage() {
             quality={80}
             className="object-cover"
             sizes="100vw"
+            loading="eager"
+            fetchPriority="high"
           />
           <div className="absolute inset-0 bg-black/50"></div>
         </div>
