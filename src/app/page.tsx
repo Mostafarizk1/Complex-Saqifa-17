@@ -309,10 +309,10 @@ export default function LandingPage() {
                   src={img}
                   alt={`صورة ${index + 1} - مجمع سقيفة 17`}
                   fill
-                  quality={75}
+                  quality={60}
                   loading="lazy"
                   className="object-cover group-hover:scale-110 transition-transform duration-500"
-                  sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
+                  sizes="(max-width: 640px) 45vw, (max-width: 768px) 30vw, (max-width: 1024px) 22vw, 18vw"
                 />
               </motion.div>
             ))}
