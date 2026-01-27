@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 import {
   Armchair,
@@ -29,7 +30,6 @@ const WHATSAPP_NUMBER = '966504211545'
 const galleryImages = Array.from({ length: 45 }, (_, i) => `/images/gallery/${i + 1}.jpg`)
 
 const heroImage = '/images/slide-1.jpg'
-const heroPlaceholder = 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2075&q=80'
 
 const WhatsAppIcon = ({ className }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="currentColor">
@@ -40,13 +40,22 @@ const WhatsAppIcon = ({ className }: { className?: string }) => (
 export default function LandingPage() {
   const { language, setLanguage, t } = useLanguage()
   const { theme, toggleTheme } = useTheme()
-  const [heroLoaded, setHeroLoaded] = useState(false)
   const [selectedImage, setSelectedImage] = useState<number | null>(null)
+  const [showVideo, setShowVideo] = useState(false)
+  const videoRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const img = new Image()
-    img.onload = () => setHeroLoaded(true)
-    img.src = heroImage
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setShowVideo(true)
+          observer.disconnect()
+        }
+      },
+      { threshold: 0.1 }
+    )
+    if (videoRef.current) observer.observe(videoRef.current)
+    return () => observer.disconnect()
   }, [])
 
   const openLightbox = (index: number) => setSelectedImage(index)
@@ -135,10 +144,16 @@ export default function LandingPage() {
       {/* Hero Section - Single Image */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
         {/* Hero Image */}
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url('${heroLoaded ? heroImage : heroPlaceholder}')` }}
-        >
+        <div className="absolute inset-0">
+          <Image
+            src={heroImage}
+            alt="مجمع سقيفة 17"
+            fill
+            priority
+            quality={80}
+            className="object-cover"
+            sizes="100vw"
+          />
           <div className="absolute inset-0 bg-black/50"></div>
         </div>
 
@@ -211,22 +226,37 @@ export default function LandingPage() {
           </motion.div>
 
           <motion.div
+            ref={videoRef}
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="relative aspect-video rounded-2xl overflow-hidden shadow-2xl"
           >
-            <iframe 
-              width="100%" 
-              height="100%" 
-              src="https://www.youtube.com/embed/wR1mNnk8BF8?si=QdFi6leTdMeJcVfI" 
-              title="YouTube video player" 
-              frameBorder="0" 
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-              referrerPolicy="strict-origin-when-cross-origin" 
-              allowFullScreen
-              className="w-full h-full"
-            ></iframe>
+            {showVideo ? (
+              <iframe 
+                width="100%" 
+                height="100%" 
+                src="https://www.youtube.com/embed/wR1mNnk8BF8?si=QdFi6leTdMeJcVfI" 
+                title="جولة في الشقة - مجمع سقيفة 17" 
+                frameBorder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                referrerPolicy="strict-origin-when-cross-origin" 
+                allowFullScreen
+                loading="lazy"
+                className="w-full h-full"
+              ></iframe>
+            ) : (
+              <div className={`w-full h-full flex items-center justify-center ${isDark ? 'bg-slate-700' : 'bg-stone-200'}`}>
+                <div className="text-center">
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-red-600 flex items-center justify-center">
+                    <svg className="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z"/>
+                    </svg>
+                  </div>
+                  <p className={isDark ? 'text-stone-400' : 'text-slate-600'}>جاري تحميل الفيديو...</p>
+                </div>
+              </div>
+            )}
           </motion.div>
         </div>
       </section>
@@ -255,15 +285,16 @@ export default function LandingPage() {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.02 }}
                 onClick={() => openLightbox(index)}
-                className="aspect-square rounded-xl overflow-hidden shadow-lg cursor-pointer group"
+                className="aspect-square rounded-xl overflow-hidden shadow-lg cursor-pointer group relative"
               >
-                <img
+                <Image
                   src={img}
-                  alt={`Gallery ${index + 1}`}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-                  }}
+                  alt={`صورة ${index + 1} - مجمع سقيفة 17`}
+                  fill
+                  quality={75}
+                  loading="lazy"
+                  className="object-cover group-hover:scale-110 transition-transform duration-500"
+                  sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
                 />
               </motion.div>
             ))}
@@ -279,6 +310,7 @@ export default function LandingPage() {
         >
           <button
             onClick={closeLightbox}
+            aria-label="إغلاق"
             className="absolute top-4 right-4 p-2 text-white hover:text-amber-500 transition-colors"
           >
             <X className="w-8 h-8" />
@@ -286,24 +318,27 @@ export default function LandingPage() {
           
           <button
             onClick={(e) => { e.stopPropagation(); prevImage(); }}
+            aria-label="الصورة السابقة"
             className="absolute left-4 p-3 bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors"
           >
             <ChevronLeft className="w-8 h-8" />
           </button>
           
-          <div className="max-w-5xl max-h-[85vh] px-16" onClick={(e) => e.stopPropagation()}>
-            <img
+          <div className="max-w-5xl max-h-[85vh] px-16 relative" onClick={(e) => e.stopPropagation()}>
+            <Image
               src={galleryImages[selectedImage]}
-              alt={`Gallery ${selectedImage + 1}`}
+              alt={`صورة ${selectedImage + 1} - مجمع سقيفة 17`}
+              width={1200}
+              height={800}
+              quality={85}
               className="max-w-full max-h-[85vh] object-contain rounded-lg"
-              onError={(e) => {
-                (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-              }}
+              priority
             />
           </div>
           
           <button
             onClick={(e) => { e.stopPropagation(); nextImage(); }}
+            aria-label="الصورة التالية"
             className="absolute right-4 p-3 bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors"
           >
             <ChevronRight className="w-8 h-8" />
@@ -468,6 +503,7 @@ export default function LandingPage() {
         href={`https://wa.me/${WHATSAPP_NUMBER}`}
         target="_blank"
         rel="noopener noreferrer"
+        aria-label="تواصل معنا عبر واتساب"
         className="fixed bottom-24 md:bottom-8 start-4 z-50 w-14 h-14 bg-green-500 hover:bg-green-600 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all"
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
@@ -489,6 +525,7 @@ export default function LandingPage() {
           href={`https://wa.me/${WHATSAPP_NUMBER}`}
           target="_blank"
           rel="noopener noreferrer"
+          aria-label="تواصل معنا عبر واتساب"
           className="flex items-center justify-center gap-3 bg-green-600 hover:bg-green-700 text-white w-full py-4 rounded-xl text-lg font-bold transition-colors shadow-lg"
         >
           <WhatsAppIcon className="w-5 h-5" />
