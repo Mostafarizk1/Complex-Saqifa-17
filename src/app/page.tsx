@@ -19,7 +19,10 @@ import {
   X,
   Sun,
   Moon,
-  Globe
+  Globe,
+  Train,
+  ShoppingBag,
+  Plane
 } from 'lucide-react'
 import { useLanguage } from '@/context/LanguageContext'
 import { useTheme } from '@/context/ThemeContext'
@@ -420,6 +423,124 @@ export default function LandingPage() {
                 </div>
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Location Section */}
+      <section className={`py-20 md:py-28 transition-colors ${isDark ? 'bg-slate-900' : 'bg-stone-100'}`}>
+        <div className="max-w-6xl mx-auto px-6">
+          <motion.div 
+            className="text-center mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+              {language === 'ar' ? 'موقع استراتيجي لا مثيل له' : 'Unparalleled Strategic Location'}
+            </h2>
+            <p className={`text-lg ${isDark ? 'text-stone-400' : 'text-slate-600'}`}>
+              {language === 'ar' ? 'يقع العقار في حي الملقا – بالقرب من تقاطع طريق الملك سلمان مع طريق الملك فهد' : 'Located in Al Malqa district – near King Salman Road intersection with King Fahd Road'}
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Map */}
+            <motion.a
+              href="https://maps.app.goo.gl/D5sAfCnGepWVf49UA"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block relative overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-shadow duration-300 group"
+              initial={{ opacity: 0, x: language === 'ar' ? 50 : -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+            >
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3621.8234!2d46.6234!3d24.8234!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e2ee3c0a1a1a1a1%3A0x1a1a1a1a1a1a1a1a!2sAl%20Malqa%2C%20Riyadh!5e0!3m2!1sen!2ssa!4v1"
+                width="100%"
+                height="400"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="rounded-2xl pointer-events-none"
+                title="موقع مجمع سقيفة 17"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
+                <span className="text-white font-bold text-lg flex items-center gap-2">
+                  <MapPin className="w-5 h-5" />
+                  {language === 'ar' ? 'افتح في خرائط جوجل' : 'Open in Google Maps'}
+                </span>
+              </div>
+            </motion.a>
+
+            {/* Landmarks */}
+            <motion.div
+              className="space-y-4"
+              initial={{ opacity: 0, x: language === 'ar' ? -50 : 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+            >
+              {/* Transport */}
+              <div className={`p-6 rounded-2xl border transition-all duration-300 hover:shadow-lg ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-white border-stone-200'}`}>
+                <div className="flex items-start gap-4">
+                  <div className={`w-14 h-14 rounded-xl flex items-center justify-center shrink-0 ${isDark ? 'bg-amber-600/20' : 'bg-amber-100'}`}>
+                    <Train className="w-7 h-7 text-amber-600" />
+                  </div>
+                  <div>
+                    <h3 className={`text-xl font-bold mb-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                      {language === 'ar' ? 'النقل العام' : 'Public Transport'}
+                    </h3>
+                    <p className={`leading-relaxed ${isDark ? 'text-stone-400' : 'text-slate-600'}`}>
+                      {language === 'ar' 
+                        ? <><span className="font-bold text-amber-600">5 دقائق</span> عن محطة البنك الأول (المسار الأزرق). <span className="font-bold text-amber-600">7-10 دقائق</span> عن محطة مركز الملك عبدالله المالي (KAFD).</>
+                        : <><span className="font-bold text-amber-600">5 minutes</span> from Al Awwal Bank Station (Blue Line). <span className="font-bold text-amber-600">7-10 minutes</span> from KAFD Station.</>
+                      }
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Shopping */}
+              <div className={`p-6 rounded-2xl border transition-all duration-300 hover:shadow-lg ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-white border-stone-200'}`}>
+                <div className="flex items-start gap-4">
+                  <div className={`w-14 h-14 rounded-xl flex items-center justify-center shrink-0 ${isDark ? 'bg-amber-600/20' : 'bg-amber-100'}`}>
+                    <ShoppingBag className="w-7 h-7 text-amber-600" />
+                  </div>
+                  <div>
+                    <h3 className={`text-xl font-bold mb-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                      {language === 'ar' ? 'المعالم التجارية' : 'Shopping & Lifestyle'}
+                    </h3>
+                    <p className={`leading-relaxed ${isDark ? 'text-stone-400' : 'text-slate-600'}`}>
+                      {language === 'ar' 
+                        ? <>بجوار <span className="font-bold text-amber-600">أفينيوز الرياض</span> مباشرة (مطاعم وكافيهات). <span className="font-bold text-amber-600">20 دقيقة</span> عن الرياض بارك مول.</>
+                        : <>Adjacent to <span className="font-bold text-amber-600">The Avenues Riyadh</span> (restaurants & cafes). <span className="font-bold text-amber-600">20 minutes</span> from Riyadh Park Mall.</>
+                      }
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Airport */}
+              <div className={`p-6 rounded-2xl border transition-all duration-300 hover:shadow-lg ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-white border-stone-200'}`}>
+                <div className="flex items-start gap-4">
+                  <div className={`w-14 h-14 rounded-xl flex items-center justify-center shrink-0 ${isDark ? 'bg-amber-600/20' : 'bg-amber-100'}`}>
+                    <Plane className="w-7 h-7 text-amber-600" />
+                  </div>
+                  <div>
+                    <h3 className={`text-xl font-bold mb-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                      {language === 'ar' ? 'الوصول للمطار' : 'Airport Access'}
+                    </h3>
+                    <p className={`leading-relaxed ${isDark ? 'text-stone-400' : 'text-slate-600'}`}>
+                      {language === 'ar' 
+                        ? <><span className="font-bold text-amber-600">20 دقيقة فقط</span> عن مطار الملك خالد الدولي عبر طريق الملك سلمان.</>
+                        : <><span className="font-bold text-amber-600">Only 20 minutes</span> from King Khalid International Airport via King Salman Road.</>
+                      }
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
           </div>
         </div>
       </section>
