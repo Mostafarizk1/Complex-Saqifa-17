@@ -134,6 +134,7 @@ export default function LandingPage() {
             {/* Theme Toggle */}
             <button
               onClick={toggleTheme}
+              aria-label={isDark ? 'تفعيل الوضع الفاتح' : 'تفعيل الوضع الداكن'}
               className={`flex items-center gap-2 px-4 py-2 backdrop-blur-sm rounded-full shadow-lg hover:shadow-xl transition-all ${isDark ? 'bg-slate-800/90 text-stone-200' : 'bg-white/90 text-slate-700'}`}
             >
               {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
@@ -209,7 +210,7 @@ export default function LandingPage() {
           
           <motion.button
             onClick={scrollToContact}
-            className="group bg-amber-600 hover:bg-amber-700 text-white px-10 py-4 rounded-lg text-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-amber-600/25 hover:shadow-2xl"
+            className="group bg-amber-700 hover:bg-amber-800 text-white px-10 py-4 rounded-lg text-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-amber-700/25 hover:shadow-2xl"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.98 }}
           >
@@ -492,7 +493,7 @@ export default function LandingPage() {
               href={`https://wa.me/${WHATSAPP_NUMBER}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-3 bg-green-600 hover:bg-green-700 text-white px-10 py-5 rounded-xl text-xl font-bold transition-all duration-300 shadow-lg hover:shadow-green-600/25 hover:shadow-2xl"
+              className="inline-flex items-center justify-center gap-3 bg-green-700 hover:bg-green-800 text-white px-10 py-5 rounded-xl text-xl font-bold transition-all duration-300 shadow-lg hover:shadow-green-700/25 hover:shadow-2xl"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -522,7 +523,7 @@ export default function LandingPage() {
         target="_blank"
         rel="noopener noreferrer"
         aria-label="تواصل معنا عبر واتساب"
-        className="fixed bottom-24 md:bottom-8 start-4 z-50 w-14 h-14 bg-green-500 hover:bg-green-600 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all"
+        className="fixed bottom-24 md:bottom-8 start-4 z-50 w-14 h-14 bg-green-600 hover:bg-green-700 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all"
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         transition={{ delay: 1, type: 'spring' }}
@@ -544,7 +545,7 @@ export default function LandingPage() {
           target="_blank"
           rel="noopener noreferrer"
           aria-label="تواصل معنا عبر واتساب"
-          className="flex items-center justify-center gap-3 bg-green-600 hover:bg-green-700 text-white w-full py-4 rounded-xl text-lg font-bold transition-colors shadow-lg"
+          className="flex items-center justify-center gap-3 bg-green-700 hover:bg-green-800 text-white w-full py-4 rounded-xl text-lg font-bold transition-colors shadow-lg"
         >
           <WhatsAppIcon className="w-5 h-5" />
           {t('contact.whatsapp')}
