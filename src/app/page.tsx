@@ -129,21 +129,43 @@ export default function LandingPage() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            {/* Language Toggle */}
-            <button
-              onClick={() => {
-                const langs: ('ar' | 'en' | 'zh' | 'ru')[] = ['ar', 'en', 'zh', 'ru']
-                const currentIndex = langs.indexOf(language)
-                const nextIndex = (currentIndex + 1) % langs.length
-                setLanguage(langs[nextIndex])
-              }}
-              className={`flex items-center gap-2 px-4 py-2 backdrop-blur-sm rounded-full shadow-lg hover:shadow-xl transition-all ${isDark ? 'bg-slate-800/90 text-stone-200' : 'bg-white/90 text-slate-700'}`}
-            >
-              <Globe className="w-4 h-4" />
-              <span className="text-sm font-medium">
-                {language === 'ar' ? 'EN' : language === 'en' ? '中文' : language === 'zh' ? 'РУ' : 'عربي'}
-              </span>
-            </button>
+            {/* Language Dropdown */}
+            <div className="relative group">
+              <button
+                className={`flex items-center gap-2 px-4 py-2 backdrop-blur-sm rounded-full shadow-lg hover:shadow-xl transition-all ${isDark ? 'bg-slate-800/90 text-stone-200' : 'bg-white/90 text-slate-700'}`}
+              >
+                <Globe className="w-4 h-4" />
+                <span className="text-sm font-medium">
+                  {language === 'ar' ? 'عربي' : language === 'en' ? 'EN' : language === 'zh' ? '中文' : 'РУ'}
+                </span>
+              </button>
+              <div className={`absolute top-full mt-2 ${language === 'ar' || language === 'ru' ? 'right-0' : 'left-0'} opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 ${isDark ? 'bg-slate-800/95' : 'bg-white/95'} backdrop-blur-sm rounded-xl shadow-xl overflow-hidden min-w-[120px]`}>
+                <button
+                  onClick={() => setLanguage('ar')}
+                  className={`w-full px-4 py-3 text-sm font-medium text-right hover:bg-amber-600 hover:text-white transition-colors ${language === 'ar' ? 'bg-amber-600 text-white' : isDark ? 'text-stone-200' : 'text-slate-700'}`}
+                >
+                  🇸🇦 عربي
+                </button>
+                <button
+                  onClick={() => setLanguage('en')}
+                  className={`w-full px-4 py-3 text-sm font-medium text-right hover:bg-amber-600 hover:text-white transition-colors ${language === 'en' ? 'bg-amber-600 text-white' : isDark ? 'text-stone-200' : 'text-slate-700'}`}
+                >
+                  🇬🇧 English
+                </button>
+                <button
+                  onClick={() => setLanguage('zh')}
+                  className={`w-full px-4 py-3 text-sm font-medium text-right hover:bg-amber-600 hover:text-white transition-colors ${language === 'zh' ? 'bg-amber-600 text-white' : isDark ? 'text-stone-200' : 'text-slate-700'}`}
+                >
+                  🇨🇳 中文
+                </button>
+                <button
+                  onClick={() => setLanguage('ru')}
+                  className={`w-full px-4 py-3 text-sm font-medium text-right hover:bg-amber-600 hover:text-white transition-colors ${language === 'ru' ? 'bg-amber-600 text-white' : isDark ? 'text-stone-200' : 'text-slate-700'}`}
+                >
+                  🇷🇺 Русский
+                </button>
+              </div>
+            </div>
 
             {/* Theme Toggle */}
             <button
