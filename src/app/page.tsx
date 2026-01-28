@@ -22,7 +22,11 @@ import {
   Globe,
   Train,
   ShoppingBag,
-  Plane
+  Plane,
+  Hospital,
+  GraduationCap,
+  Building2,
+  PartyPopper
 } from 'lucide-react'
 import { useLanguage } from '@/context/LanguageContext'
 import { useTheme } from '@/context/ThemeContext'
@@ -127,11 +131,18 @@ export default function LandingPage() {
           >
             {/* Language Toggle */}
             <button
-              onClick={() => setLanguage(language === 'ar' ? 'en' : 'ar')}
+              onClick={() => {
+                const langs: ('ar' | 'en' | 'zh' | 'ru')[] = ['ar', 'en', 'zh', 'ru']
+                const currentIndex = langs.indexOf(language)
+                const nextIndex = (currentIndex + 1) % langs.length
+                setLanguage(langs[nextIndex])
+              }}
               className={`flex items-center gap-2 px-4 py-2 backdrop-blur-sm rounded-full shadow-lg hover:shadow-xl transition-all ${isDark ? 'bg-slate-800/90 text-stone-200' : 'bg-white/90 text-slate-700'}`}
             >
               <Globe className="w-4 h-4" />
-              <span className="text-sm font-medium">{language === 'ar' ? 'EN' : 'عربي'}</span>
+              <span className="text-sm font-medium">
+                {language === 'ar' ? 'EN' : language === 'en' ? '中文' : language === 'zh' ? 'РУ' : 'عربي'}
+              </span>
             </button>
 
             {/* Theme Toggle */}
@@ -437,111 +448,139 @@ export default function LandingPage() {
             viewport={{ once: true }}
           >
             <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${isDark ? 'text-white' : 'text-slate-900'}`}>
-              {language === 'ar' ? 'موقع استراتيجي لا مثيل له' : 'Unparalleled Strategic Location'}
+              {language === 'ar' ? 'موقع استراتيجي' : language === 'zh' ? '战略位置' : language === 'ru' ? 'Стратегическое расположение' : 'Strategic Location'}
             </h2>
             <p className={`text-lg ${isDark ? 'text-stone-400' : 'text-slate-600'}`}>
-              {language === 'ar' ? 'يقع العقار في حي الملقا – بالقرب من تقاطع طريق الملك سلمان مع طريق الملك فهد' : 'Located in Al Malqa district – near King Salman Road intersection with King Fahd Road'}
+              {language === 'ar' ? 'حي الملقا – تقاطع طريق الملك سلمان مع طريق الملك فهد' : language === 'zh' ? '马尔卡区 - 萨勒曼国王路与法赫德国王路交汇处' : language === 'ru' ? 'Район Аль-Малка – пересечение дороги короля Салмана с дорогой короля Фахда' : 'Al Malqa District – King Salman Road & King Fahd Road Intersection'}
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Map */}
-            <motion.a
-              href="https://maps.app.goo.gl/D5sAfCnGepWVf49UA"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block relative overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-shadow duration-300 group"
-              initial={{ opacity: 0, x: language === 'ar' ? 50 : -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-            >
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3621.8234!2d46.6234!3d24.8234!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e2ee3c0a1a1a1a1%3A0x1a1a1a1a1a1a1a1a!2sAl%20Malqa%2C%20Riyadh!5e0!3m2!1sen!2ssa!4v1"
-                width="100%"
-                height="400"
-                style={{ border: 0 }}
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                className="rounded-2xl pointer-events-none"
-                title="موقع مجمع سقيفة 17"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
-                <span className="text-white font-bold text-lg flex items-center gap-2">
-                  <MapPin className="w-5 h-5" />
-                  {language === 'ar' ? 'افتح في خرائط جوجل' : 'Open in Google Maps'}
-                </span>
-              </div>
-            </motion.a>
+          {/* Map - Full Width */}
+          <motion.a
+            href="https://maps.app.goo.gl/D5sAfCnGepWVf49UA"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block relative overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-shadow duration-300 group mb-10"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3621.8234!2d46.6234!3d24.8234!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e2ee3c0a1a1a1a1%3A0x1a1a1a1a1a1a1a1a!2sAl%20Malqa%2C%20Riyadh!5e0!3m2!1sen!2ssa!4v1"
+              width="100%"
+              height="350"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="rounded-2xl pointer-events-none"
+              title="موقع مجمع سقيفة 17"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
+              <span className="text-white font-bold text-lg flex items-center gap-2">
+                <MapPin className="w-5 h-5" />
+                {language === 'ar' ? 'افتح في خرائط جوجل' : language === 'zh' ? '在谷歌地图中打开' : language === 'ru' ? 'Открыть в Google Картах' : 'Open in Google Maps'}
+              </span>
+            </div>
+          </motion.a>
 
-            {/* Landmarks */}
-            <motion.div
-              className="space-y-4"
-              initial={{ opacity: 0, x: language === 'ar' ? -50 : 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-            >
-              {/* Transport */}
-              <div className={`p-6 rounded-2xl border transition-all duration-300 hover:shadow-lg ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-white border-stone-200'}`}>
-                <div className="flex items-start gap-4">
-                  <div className={`w-14 h-14 rounded-xl flex items-center justify-center shrink-0 ${isDark ? 'bg-amber-600/20' : 'bg-amber-100'}`}>
-                    <Train className="w-7 h-7 text-amber-600" />
-                  </div>
-                  <div>
-                    <h3 className={`text-xl font-bold mb-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                      {language === 'ar' ? 'النقل العام' : 'Public Transport'}
-                    </h3>
-                    <p className={`leading-relaxed ${isDark ? 'text-stone-400' : 'text-slate-600'}`}>
-                      {language === 'ar' 
-                        ? <><span className="font-bold text-amber-600">5 دقائق</span> عن محطة البنك الأول (المسار الأزرق). <span className="font-bold text-amber-600">7-10 دقائق</span> عن محطة مركز الملك عبدالله المالي (KAFD).</>
-                        : <><span className="font-bold text-amber-600">5 minutes</span> from Al Awwal Bank Station (Blue Line). <span className="font-bold text-amber-600">7-10 minutes</span> from KAFD Station.</>
-                      }
-                    </p>
-                  </div>
+          {/* Landmarks Grid - Below Map */}
+          <motion.div
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            {/* Metro */}
+            <div className={`p-5 rounded-2xl border transition-all duration-300 hover:shadow-lg ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-white border-stone-200'}`}>
+              <div className="flex items-center gap-4">
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${isDark ? 'bg-amber-600/20' : 'bg-amber-100'}`}>
+                  <Train className="w-6 h-6 text-amber-600" />
+                </div>
+                <div>
+                  <h3 className={`font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                    {language === 'ar' ? 'محطة المترو' : language === 'zh' ? '地铁站' : language === 'ru' ? 'Станция метро' : 'Metro Station'}
+                  </h3>
+                  <p className="text-amber-600 font-bold">{language === 'ar' ? '5 دقائق' : language === 'zh' ? '5分钟' : language === 'ru' ? '5 минут' : '5 min'}</p>
                 </div>
               </div>
+            </div>
 
-              {/* Shopping */}
-              <div className={`p-6 rounded-2xl border transition-all duration-300 hover:shadow-lg ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-white border-stone-200'}`}>
-                <div className="flex items-start gap-4">
-                  <div className={`w-14 h-14 rounded-xl flex items-center justify-center shrink-0 ${isDark ? 'bg-amber-600/20' : 'bg-amber-100'}`}>
-                    <ShoppingBag className="w-7 h-7 text-amber-600" />
-                  </div>
-                  <div>
-                    <h3 className={`text-xl font-bold mb-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                      {language === 'ar' ? 'المعالم التجارية' : 'Shopping & Lifestyle'}
-                    </h3>
-                    <p className={`leading-relaxed ${isDark ? 'text-stone-400' : 'text-slate-600'}`}>
-                      {language === 'ar' 
-                        ? <>بجوار <span className="font-bold text-amber-600">أفينيوز الرياض</span> مباشرة (مطاعم وكافيهات). <span className="font-bold text-amber-600">20 دقيقة</span> عن الرياض بارك مول.</>
-                        : <>Adjacent to <span className="font-bold text-amber-600">The Avenues Riyadh</span> (restaurants & cafes). <span className="font-bold text-amber-600">20 minutes</span> from Riyadh Park Mall.</>
-                      }
-                    </p>
-                  </div>
+            {/* Hospital */}
+            <div className={`p-5 rounded-2xl border transition-all duration-300 hover:shadow-lg ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-white border-stone-200'}`}>
+              <div className="flex items-center gap-4">
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${isDark ? 'bg-amber-600/20' : 'bg-amber-100'}`}>
+                  <Hospital className="w-6 h-6 text-amber-600" />
+                </div>
+                <div>
+                  <h3 className={`font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                    {language === 'ar' ? 'مستشفى د. سليمان الحبيب' : language === 'zh' ? '苏莱曼·哈比卜医院' : language === 'ru' ? 'Больница Др. Сулеймана' : 'Dr. Sulaiman Hospital'}
+                  </h3>
+                  <p className="text-amber-600 font-bold">{language === 'ar' ? '8 دقائق' : language === 'zh' ? '8分钟' : language === 'ru' ? '8 минут' : '8 min'}</p>
                 </div>
               </div>
+            </div>
 
-              {/* Airport */}
-              <div className={`p-6 rounded-2xl border transition-all duration-300 hover:shadow-lg ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-white border-stone-200'}`}>
-                <div className="flex items-start gap-4">
-                  <div className={`w-14 h-14 rounded-xl flex items-center justify-center shrink-0 ${isDark ? 'bg-amber-600/20' : 'bg-amber-100'}`}>
-                    <Plane className="w-7 h-7 text-amber-600" />
-                  </div>
-                  <div>
-                    <h3 className={`text-xl font-bold mb-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                      {language === 'ar' ? 'الوصول للمطار' : 'Airport Access'}
-                    </h3>
-                    <p className={`leading-relaxed ${isDark ? 'text-stone-400' : 'text-slate-600'}`}>
-                      {language === 'ar' 
-                        ? <><span className="font-bold text-amber-600">20 دقيقة فقط</span> عن مطار الملك خالد الدولي عبر طريق الملك سلمان.</>
-                        : <><span className="font-bold text-amber-600">Only 20 minutes</span> from King Khalid International Airport via King Salman Road.</>
-                      }
-                    </p>
-                  </div>
+            {/* Boulevard */}
+            <div className={`p-5 rounded-2xl border transition-all duration-300 hover:shadow-lg ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-white border-stone-200'}`}>
+              <div className="flex items-center gap-4">
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${isDark ? 'bg-amber-600/20' : 'bg-amber-100'}`}>
+                  <PartyPopper className="w-6 h-6 text-amber-600" />
+                </div>
+                <div>
+                  <h3 className={`font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                    {language === 'ar' ? 'بوليفارد الرياض' : language === 'zh' ? '利雅得大道' : language === 'ru' ? 'Бульвар Эр-Рияд' : 'Boulevard Riyadh'}
+                  </h3>
+                  <p className="text-amber-600 font-bold">{language === 'ar' ? '13 دقيقة' : language === 'zh' ? '13分钟' : language === 'ru' ? '13 минут' : '13 min'}</p>
                 </div>
               </div>
-            </motion.div>
-          </div>
+            </div>
+
+            {/* KAFD */}
+            <div className={`p-5 rounded-2xl border transition-all duration-300 hover:shadow-lg ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-white border-stone-200'}`}>
+              <div className="flex items-center gap-4">
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${isDark ? 'bg-amber-600/20' : 'bg-amber-100'}`}>
+                  <Building2 className="w-6 h-6 text-amber-600" />
+                </div>
+                <div>
+                  <h3 className={`font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                    {language === 'ar' ? 'مركز الملك عبدالله المالي' : language === 'zh' ? '阿卜杜拉国王金融区' : language === 'ru' ? 'Финансовый центр KAFD' : 'KAFD'}
+                  </h3>
+                  <p className="text-amber-600 font-bold">{language === 'ar' ? '15 دقيقة' : language === 'zh' ? '15分钟' : language === 'ru' ? '15 минут' : '15 min'}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* University */}
+            <div className={`p-5 rounded-2xl border transition-all duration-300 hover:shadow-lg ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-white border-stone-200'}`}>
+              <div className="flex items-center gap-4">
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${isDark ? 'bg-amber-600/20' : 'bg-amber-100'}`}>
+                  <GraduationCap className="w-6 h-6 text-amber-600" />
+                </div>
+                <div>
+                  <h3 className={`font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                    {language === 'ar' ? 'جامعة الملك سعود' : language === 'zh' ? '沙特国王大学' : language === 'ru' ? 'Университет короля Сауда' : 'King Saud University'}
+                  </h3>
+                  <p className="text-amber-600 font-bold">{language === 'ar' ? '15 دقيقة' : language === 'zh' ? '15分钟' : language === 'ru' ? '15 минут' : '15 min'}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Airport */}
+            <div className={`p-5 rounded-2xl border transition-all duration-300 hover:shadow-lg ${isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-white border-stone-200'}`}>
+              <div className="flex items-center gap-4">
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${isDark ? 'bg-amber-600/20' : 'bg-amber-100'}`}>
+                  <Plane className="w-6 h-6 text-amber-600" />
+                </div>
+                <div>
+                  <h3 className={`font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                    {language === 'ar' ? 'مطار الملك خالد' : language === 'zh' ? '哈立德国王机场' : language === 'ru' ? 'Аэропорт им. короля Халида' : 'King Khalid Airport'}
+                  </h3>
+                  <p className="text-amber-600 font-bold">{language === 'ar' ? '20 دقيقة' : language === 'zh' ? '20分钟' : language === 'ru' ? '20 минут' : '20 min'}</p>
+                </div>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 
@@ -644,7 +683,7 @@ export default function LandingPage() {
         target="_blank"
         rel="noopener noreferrer"
         aria-label="تواصل معنا عبر واتساب"
-        className="fixed bottom-24 md:bottom-8 start-4 z-50 w-14 h-14 bg-green-600 hover:bg-green-700 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all"
+        className="fixed bottom-8 start-4 z-50 w-14 h-14 bg-green-600 hover:bg-green-700 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all"
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         transition={{ delay: 1, type: 'spring' }}
@@ -653,25 +692,6 @@ export default function LandingPage() {
       >
         <WhatsAppIcon className="w-7 h-7 text-white" />
       </motion.a>
-
-      {/* Floating CTA - Mobile */}
-      <motion.div 
-        className={`fixed bottom-0 left-0 right-0 p-4 backdrop-blur-sm border-t md:hidden z-40 ${isDark ? 'bg-slate-800/95 border-slate-700' : 'bg-white/95 border-stone-200'}`}
-        initial={{ y: 100 }}
-        animate={{ y: 0 }}
-        transition={{ delay: 1 }}
-      >
-        <a
-          href={`https://wa.me/${WHATSAPP_NUMBER}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="تواصل معنا عبر واتساب"
-          className="flex items-center justify-center gap-3 bg-green-700 hover:bg-green-800 text-white w-full py-4 rounded-xl text-lg font-bold transition-colors shadow-lg"
-        >
-          <WhatsAppIcon className="w-5 h-5" />
-          {t('contact.whatsapp')}
-        </a>
-      </motion.div>
     </main>
   )
 }
