@@ -346,10 +346,10 @@ export default function LandingPage() {
                   src={img}
                   alt={`صورة ${index + 1} - مجمع سقيفة 17`}
                   fill
-                  quality={60}
+                  quality={50}
                   loading="lazy"
                   className="object-cover group-hover:scale-110 transition-transform duration-500"
-                  sizes="(max-width: 640px) 45vw, (max-width: 768px) 30vw, (max-width: 1024px) 22vw, 18vw"
+                  sizes="(max-width: 640px) 40vw, (max-width: 768px) 28vw, (max-width: 1024px) 20vw, 16vw"
                 />
               </motion.div>
             ))}
@@ -385,7 +385,7 @@ export default function LandingPage() {
               alt={`صورة ${selectedImage + 1} - مجمع سقيفة 17`}
               width={1200}
               height={800}
-              quality={85}
+              quality={75}
               className="max-w-full max-h-[85vh] object-contain rounded-lg"
               priority
             />
